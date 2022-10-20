@@ -1,7 +1,20 @@
-import "./App.css";
+import { useState } from "react";
+import Home from "./components/Home";
+import Quizz from "./components/Quizz";
 
 function App() {
-  return <div className="App"></div>;
+  const [home, setHome] = useState(true);
+
+  const handleHome = () => {
+    setHome((prev) => !prev);
+  };
+
+  return (
+    <>
+      {home && <Home handleClick={handleHome} />}
+      {!home && <Quizz />}
+    </>
+  );
 }
 
 export default App;
