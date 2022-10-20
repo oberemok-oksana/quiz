@@ -1,0 +1,23 @@
+.btn {
+  border: 1px solid #4d5b9e;
+  border-radius: 10px;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 6px 18px;
+  color: #293264;
+}
+
+.btn:hover {
+  background-color: #d6dbf5;
+}
+
+.question-card {
+  border-bottom: 2px solid #dbdef0;
+  padding-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
