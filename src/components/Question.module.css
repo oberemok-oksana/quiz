@@ -1,7 +1,7 @@
 .btn {
   border: 1px solid #4d5b9e;
   border-radius: 10px;
-  background-color: transparent;
+  /* background-color: transparent; */
   cursor: pointer;
   padding: 6px 18px;
   color: #293264;
@@ -9,6 +9,11 @@
 
 .btn:hover {
   background-color: #d6dbf5;
+}
+
+.btn:disabled {
+  background-color: #dbdef0;
+  cursor: not-allowed;
 }
 
 .question-card {
@@ -20,4 +25,14 @@
   display: flex;
   justify-content: center;
   gap: 20px;
+}
+
+.btn.right,
+.btn.underline {
+  transition: all 0.5s;
+  background-color: rgb(30, 207, 148);
+}
+.btn.wrong {
+  transition: all 0.5s;
+  background-color: rgb(237, 82, 121);
 }

@@ -1,31 +1,52 @@
+import clsx from "clsx";
+import { useMemo, useState } from "react";
 import styles from "./Question.module.css";
 
 const Question = (props) => {
-  const shuffleAnswers = (array, correctAnswer) => {
-    const copy = array.slice();
-    const randomIndex = Math.trunc(Math.random() * copy.length - 1);
+  const [buttonText, setButtonText] = useState("");
+  const [clicked, setClicked] = useState(false);
+
+  const shuffle = (answers, correctAnswer) => {
+    const randomIndex = Math.trunc(Math.random() * answers.length);
+    const copy = answers.slice();
     copy.splice(randomIndex, 0, correctAnswer);
     return copy;
   };
 
-  const shuffledAnswers = shuffleAnswers(
-    props.incorrectAnswers,
-    props.correctAnswer
-  );
+  const allAnswers = useMemo(() => {
+    return shuffle(props.incorrectAnswers, props.correctAnswer);
+  }, []);
 
-  // console.log(shuffleAnswers([1, 2, 3, 4]));
+  const handleClick = (answer) => {
+    props.handleAnswer(answer, props.correctAnswer);
+    setButtonText(answer);
+    setClicked(true);
+  };
 
   return (
     <div className={styles["question-card"]}>
       <h2>{props.question}</h2>
       <div className={styles.buttons}>
-        {/* <button className={styles.btn}>{props.correctAnswer}</button> */}
-        {shuffledAnswers.map((answer) => (
-          <button className={styles.btn}>{answer}</button>
-        ))}
-
-        {/* <button className={styles.btn}>answer 3</button>
-        <button className={styles.btn}>answer 4</button> */}
+        {allAnswers.map((answer) => {
+          const isClicked = answer === buttonText;
+          const isCorrect = props.correctAnswer === buttonText;
+          return (
+            <button
+              key={answer}
+              onClick={() => {
+                handleClick(answer);
+              }}
+              className={clsx(styles.btn, {
+                [styles.right]: isClicked && isCorrect,
+                [styles.wrong]: isClicked && !isCorrect,
+                [styles.underline]: clicked && props.correctAnswer === answer,
+              })}
+              disabled={buttonText}
+            >
+              {answer}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
