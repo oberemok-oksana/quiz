@@ -2,27 +2,54 @@ import { useEffect, useState } from "react";
 import { getQuestions } from "../api";
 import Question from "./Question";
 import styles from "./Quizz.module.css";
+import Confetti from "react-confetti";
 
-const Quizz = () => {
+const Quizz = (props) => {
   const [questions, setQuestions] = useState([]);
+  const [points, setPoints] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [clickAmount, setClickAmount] = useState(0);
+
+  const handleAnswer = (answer, correctAnswer) => {
+    setClickAmount((prev) => prev + 1);
+    const correct = answer === correctAnswer;
+    if (correct) {
+      setPoints((prev) => prev + 1);
+    }
+    return correct;
+  };
 
   useEffect(() => {
-    getQuestions().then((data) => setQuestions(data.results));
+    setIsLoading(true);
+    getQuestions().then((data) => {
+      setQuestions(data.results);
+      setIsLoading(false);
+    });
   }, []);
-  console.log(questions);
 
   return (
     <section className="section">
-      <div className="container">
-        {questions.map((question) => (
-          <Question
-            key={question.question}
-            question={question.question}
-            correctAnswer={question.correct_answer}
-            incorrectAnswers={question["incorrect_answers"]}
-          />
-        ))}
-      </div>
+      {clickAmount === 5 && <Confetti />}
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && (
+        <div className="container">
+          {questions.map((question) => (
+            <Question
+              key={question.question}
+              question={question.question}
+              correctAnswer={question.correct_answer}
+              incorrectAnswers={question["incorrect_answers"]}
+              handleAnswer={handleAnswer}
+            />
+          ))}
+          <h3>
+            You scored {points}/{questions.length} points!
+          </h3>
+          <button onClick={props.handleClick} className={styles.btn}>
+            Play again
+          </button>
+        </div>
+      )}
     </section>
   );
 };
