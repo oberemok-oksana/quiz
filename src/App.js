@@ -12,7 +12,7 @@ function App() {
   return (
     <>
       {home && <Home handleClick={handleHome} />}
-      {!home && <Quizz />}
+      {!home && <Quizz handleClick={handleHome} />}
     </>
   );
 }
